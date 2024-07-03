@@ -19,16 +19,18 @@ tecnologia(beto,herreria ).
 tecnologia(beto, fundicion).
 tecnologia(beto, forja).
 tecnologia(carola,herreria).
-tecnologia(dimitri,herreria)
-tecnologia(dimitri,fundicion)
+tecnologia(dimitri,herreria).
+tecnologia(dimitri,fundicion).
 
-
+%  PUNTO 2
 esExpertoEnMetales(Persona):-
     esJugador(Persona, _),
+    tecnologia(Persona, herreria),
+    tecnologia(Persona, forja),
+    (tecnologia(Persona, fundicion) ; esJugador(Persona, romanos)).
 
-esPopular(Civilizacion):-
-
-tieneAlcanceGlobal(Tecnologia):-
-
-esLider(Civilizacion):-
-
+%  PUNTO 3
+esPopular(Civilizacion) :-
+        esJugador(Persona1, Civilizacion),
+        esJugador(Persona2, Civilizacion),
+        Persona1 \= Persona2.
