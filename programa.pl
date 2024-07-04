@@ -35,12 +35,6 @@ esExpertoEnMetales(Persona):-
     tecnologia(Persona,herreria),
     tecnologia(Persona,forja).
 
-% Otra Alternativa
-%esExpertoEnMetales(Persona):-
-%    esJugador(Persona, _),
-%    tecnologia(Persona, herreria),
-%    tecnologia(Persona, forja),
-%    (tecnologia(Persona, fundicion) ; esJugador(Persona, romanos)).
 
 %  PUNTO 3
 esPopular(Civilizacion):-
