@@ -50,10 +50,6 @@ tieneAlcanceGlobal(Tecnologia):-
 
 % PUNTO 5
 
-% Todas las tecnologias de todas las civilizaciones
-todasLasTecnologias(Tecnologia):-
-    tecnologia(_, Tecnologia).
-
 % Verifica si todas las personas de la civilizacion saben la tecnologia
 civilizacionSabeTecnologia(Civilizacion, Tecnologia) :-
     esJugador(Persona, Civilizacion),
@@ -64,31 +60,45 @@ civilizacionLider(Civilizacion):-
     esJugador(_ , Civilizacion),
     forall(civilizacionSabeTecnologia(_, Tecnologia), civilizacionSabeTecnologia(Civilizacion, Tecnologia)).
 
-% campeones 1-100, jinetes cab-cam, piqueros 1-3 si-no.
-%Poner todas las unidades juntas ?
-% jugador, unidad[], vida.
-unidad (ana, jinete[caballo],90).
-unidad (ana, piquero[escudo,1],55).
-unidad (ana, piquero[sinEscudo,2],65).
-unidades (ana,unidad(jinete,caballo)). %cambiarnombreaunidadesporotra cosa
-unidades (ana, unidad(piquero,escudo,1)).
-unidades (ana, unidad(piquero,sinEscudo,2)).
-unit (ana,unidad(jinete,caballo,90),). %cambiarnombreaunidadesporotra cosa
-unit (ana, unidad(piquero,escudo,1,55)).
-unit (ana, unidad(piquero,sinEscudo,2,65)).
+% SEGUNDA PARTE
 
-tiene(ana,jinete(caballo,90)).
-tiene(ana,piquero(escudo, 1, 55)).
-tiene(ana,piquero(sinEscudo, 2, 65)).
+% PUNTO 6
 
-vidaDe(Jugador, TotalVida):-
-    unidad(Jugador,_,TotalVida).
-%vidaDe(ana,)
-%existeUnaUnidadQueEsMayorATodos
+tiene(ana, jinete(caballo)).
+tiene(ana, piquero(conEscudo, 1)).
+tiene(ana, piquero(sinEscudo, 2)).
+tiene(beto, campeon(100)).
+tiene(beto, campeon(80)).
+tiene(beto, piquero(conEscudo, 1)).
+tiene(beto, jinete(camello)).
+tiene(carola, piquero(sinEscudo, 3)).
+tiene(carola, piquero(conEscudo, 2)).
 
-tieneVida(unidad())
-forall((Jugador,Unidad,Vida),(Unidad,Vida)>=(_,Vida)).
+% Dimitri no tiene unidades
 
-% ?(Unidad,Vida)>=(_,Vida).
-compararVida(Jugador, X , Y):-
-    (Jugador,Unidad,Vida)>=(Jugador,_,Vida).
+% Punto 7
+
+% Vida jinetes
+vidaUnidad(jinete(caballo), 90).
+vidaUnidad(jinete(camello), 80).
+
+% Vida Campeon
+vidaUnidad(campeon(Vida), Vida).
+
+% Vida Piqueros sin escudo
+vidaUnidad(piquero(sinEscudo, 1), 50).
+vidaUnidad(piquero(sinEscudo, 2), 65).
+vidaUnidad(piquero(sinEscudo, 3), 70).
+
+% Vida Piqueros con escudo
+vidaUnidad(piquero(conEscudo, N), VidaConEscudo):-
+    vidaUnidad(piquero(sinEscudo, N), VidaSinEscudo),
+    VidaConEscudo is 1.10 * VidaSinEscudo.
+
+% Resolver
+
+% Usar Recursividad con listas posiblemente
+
+
+
+
