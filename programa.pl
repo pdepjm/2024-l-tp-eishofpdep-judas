@@ -76,7 +76,9 @@ tiene(carola, piquero(conEscudo, 2)).
 
 % Dimitri no tiene unidades
 
-% Punto 7
+% PUNTO 7
+
+% vidaUnidad(Unidad, Vida).
 
 % Vida jinetes
 vidaUnidad(jinete(caballo), 90).
@@ -91,14 +93,17 @@ vidaUnidad(piquero(sinEscudo, 2), 65).
 vidaUnidad(piquero(sinEscudo, 3), 70).
 
 % Vida Piqueros con escudo
-vidaUnidad(piquero(conEscudo, N), VidaConEscudo):-
-    vidaUnidad(piquero(sinEscudo, N), VidaSinEscudo),
+vidaUnidad(piquero(conEscudo, Nivel), VidaConEscudo):-
+    vidaUnidad(piquero(sinEscudo, Nivel), VidaSinEscudo),
     VidaConEscudo is 1.10 * VidaSinEscudo.
 
-% Resolver
+unidadConMasVida(Jugador, Unidad) :-
+    tiene(Jugador, Unidad),
+    findall(Vida, (tiene(Jugador, Unidades), vidaUnidad(Unidades, Vida)), Vidas),
+    max_member(VidaMasAlta, Vidas),
+    vidaUnidad(Unidad, VidaMasAlta).
 
-% Usar Recursividad con listas posiblemente
-
+% PUNTO 8
 
 
 
