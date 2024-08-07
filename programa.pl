@@ -11,6 +11,7 @@ esJugador(beto, incas).
 esJugador(carola, romanos).
 esJugador(dimitri, romanos).
 % no esJugador(elsa).
+%desarrolloTecnologia(jugador,tecnologia)
 tecnologia(ana, herreria).
 tecnologia(ana, forja).
 tecnologia(ana, emplumado).
@@ -21,7 +22,19 @@ tecnologia(beto, forja).
 tecnologia(carola, herreria).
 tecnologia(dimitri, herreria).
 tecnologia(dimitri, fundicion).
-
+% Tecnologías disponibles en el juego o cambiarle el nombre  a tecnologia
+tecnologiaDisponible(herreria).
+tecnologiaDisponible(forja).
+tecnologiaDisponible(emplumado).
+tecnologiaDisponible(laminas).
+tecnologiaDisponible(punzon).
+tecnologiaDisponible(fundicion).
+tecnologiaDisponible(horno).
+tecnologiaDisponible(malla).
+tecnologiaDisponible(placas).
+tecnologiaDisponible(collera).
+tecnologiaDisponible(arado).
+tecnologiaDisponible(molino).
 % ====================================== PUNTO 2 ============================================
 
 esExpertoEnMetales(Persona):-
@@ -151,29 +164,32 @@ puedeSobrevivirAUnAsedio(Jugador):-
 % Arbol de tecnologias
 
 dependeDe(emplumado, herreria).
+dependeDe(laminas, herreria).
+dependeDe(forja, herreria).
+
 dependeDe(punzon, emplumado).
 
-dependeDe(forja, herreria).
 dependeDe(fundicion, forja).
 dependeDe(horno, fundicion).
 
-dependeDe(laminas, herreria).
 dependeDe(malla, laminas).
 dependeDe(placas, malla).
 
 dependeDe(collera, molino).
 dependeDe(arado, collera).
 
-antecede(Tecnologia1, Tecnologia2):-
-    dependeDe(Tecnologia1, Tecnologia2).
-antecede(TecnologiaBase, Tecnologia2):-
-    dependeDe(Tecnologia1, Tecnologia2),
-    antecede(TecnologiaBase, Tecnologia1).
-
 % b)
-desarrolloTecno(Jugador, Tecno):-
-    tecnologia(Jugador, Tecno).
 
-puedeDesarrollar2(Jugador, Tecno):-
-    not(tecnologia(Jugador, Tecno)),
-    forall(antecede(Tecno, Tecnos), desarrolloTecno(Jugador, Tecnos)).
+puedeDesarrollar(Persona, Tecnologia):-
+    tecnologiaDisponible(Tecnologia),
+    not(tecnologia(Persona, Tecnologia)),
+    todasDependenciasDesarrolladas(Persona, Tecnologia).
+
+todasDependenciasDesarrolladas(_, Tecnologia):-
+    not(dependeDe(Tecnologia, _)). % Si la tecnología no depende de ninguna otra, se puede desarrollar.
+
+todasDependenciasDesarrolladas(Persona, Tecnologia):-
+    dependeDe(Tecnologia, Dependencia),
+    tecnologia(Persona, Dependencia),
+    todasDependenciasDesarrolladas(Persona, Dependencia).
+
