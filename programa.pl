@@ -145,3 +145,21 @@ puedeSobrevivirAUnAsedio(Jugador):-
     ConEscudo > SinEscudo.
 
 % ====================================== PUNTO 10 ============================================
+
+% a)
+
+% Arbol de tecnologias
+
+dependeDe(emplumado, punzon).
+dependeDe(fundicion, horno).
+dependeDe(forja, fundicion).
+dependeDe(malla, placas).
+dependeDe(laminas, malla).
+dependeDe(herreria, emplumado).
+dependeDe(herreria, forja).
+dependeDe(herreria, laminas).
+dependeDe(collera, arado).
+dependeDe(molino, collera).
+
+% b)
+    
