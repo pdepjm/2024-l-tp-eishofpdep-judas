@@ -161,5 +161,16 @@ dependeDe(herreria, laminas).
 dependeDe(collera, arado).
 dependeDe(molino, collera).
 
+antecede(Tecnologia1, Tecnologia2):-
+    dependeDe(Tecnologia1, Tecnologia2).
+antecede(TecnologiaBase, Tecnologia2):-
+    dependeDe(Tecnologia1, Tecnologia2),
+    antecede(TecnologiaBase, Tecnologia1).
+
 % b)
-    
+
+puedeDesarrollar(Jugador, Tecnologia):-
+    esJugador(Jugador, _),
+    not(tecnologia(Jugador, Tecnologia)),
+    antecede(Tecnologia, Tecnologia2),    
+    puedeDesarrollar(Jugador, Tecnologia2).
