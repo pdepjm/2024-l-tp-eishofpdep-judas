@@ -140,5 +140,8 @@ contarPiqueros(Jugador, ConEscudo, SinEscudo) :-
 
 
 puedeSobrevivirAUnAsedio(Jugador):-
+    tiene(Jugador, _),
     contarPiqueros(Jugador, ConEscudo, SinEscudo),
     ConEscudo > SinEscudo.
+
+% ====================================== PUNTO 10 ============================================
