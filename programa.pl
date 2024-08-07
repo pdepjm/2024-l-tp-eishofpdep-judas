@@ -92,16 +92,24 @@ vidaUnidad(piquero(sinEscudo, 2), 65).
 vidaUnidad(piquero(sinEscudo, 3), 70).
 
 % Vida Piqueros con escudo
-vidaUnidad(piquero(conEscudo, N), VidaConEscudo):-
-    vidaUnidad(piquero(sinEscudo, N), VidaSinEscudo),
+vidaUnidad(piquero(conEscudo, Nivel), VidaConEscudo):-
+    vidaUnidad(piquero(sinEscudo, Nivel), VidaSinEscudo),
     VidaConEscudo is 1.10 * VidaSinEscudo.
 
-% Regla para encontrar la unidad con la vida máxima
+
 unidadConMasVida(Jugador, UnidadConMasVida):-
     tiene(Jugador, UnidadConMasVida),
     vidaUnidad(UnidadConMasVida, MayorVida),
     forall((tiene(Jugador, OtraUnidad), vidaUnidad(OtraUnidad, OtraVida)),OtraVida =< MayorVida).
-% el forall verifica que no hay otra unidad del mismo jugador con una vida mayor que la vida de la unidad seleccionada.
+
+
+% Posibilidad 2 
+
+unidadConMasVida2(Jugador, Unidad) :-
+    tiene(Jugador, Unidad),
+    findall(Vida, (tiene(Jugador, Unidades), vidaUnidad(Unidades, Vida)), Vidas),
+    max_member(VidaMasAlta, Vidas),
+    vidaUnidad(Unidad, VidaMasAlta).
 
 % ====================================== PUNTO 8 ============================================
 
@@ -123,14 +131,14 @@ leGana(Unidad1, Unidad2):-
 
 % ====================================== PUNTO 9 ============================================
 
-% Regla para contar los piqueros con y sin escudo
+
 contarPiqueros(Jugador, ConEscudo, SinEscudo) :-
-    findall(piquero(conEscudo, N), tiene(Jugador, piquero(conEscudo, N)), ListaConEscudo),
-    findall(piquero(sinEscudo, N), tiene(Jugador, piquero(sinEscudo, N)), ListaSinEscudo),
+    findall(piquero(conEscudo, Nivel), tiene(Jugador, piquero(conEscudo, Nivel)), ListaConEscudo),
+    findall(piquero(sinEscudo, Nivel), tiene(Jugador, piquero(sinEscudo, Nivel)), ListaSinEscudo),
     length(ListaConEscudo, ConEscudo),
     length(ListaSinEscudo, SinEscudo).
 
-% Regla para determinar si un jugador puede sobrevivir a un asedio
+
 puedeSobrevivirAUnAsedio(Jugador):-
     contarPiqueros(Jugador, ConEscudo, SinEscudo),
     ConEscudo > SinEscudo.
