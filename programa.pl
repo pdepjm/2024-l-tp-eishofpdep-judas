@@ -150,16 +150,19 @@ puedeSobrevivirAUnAsedio(Jugador):-
 
 % Arbol de tecnologias
 
-dependeDe(emplumado, punzon).
-dependeDe(fundicion, horno).
-dependeDe(forja, fundicion).
-dependeDe(malla, placas).
-dependeDe(laminas, malla).
-dependeDe(herreria, emplumado).
-dependeDe(herreria, forja).
-dependeDe(herreria, laminas).
-dependeDe(collera, arado).
-dependeDe(molino, collera).
+dependeDe(emplumado, herreria).
+dependeDe(punzon, emplumado).
+
+dependeDe(forja, herreria).
+dependeDe(fundicion, forja).
+dependeDe(horno, fundicion).
+
+dependeDe(laminas, herreria).
+dependeDe(malla, laminas).
+dependeDe(placas, malla).
+
+dependeDe(collera, molino).
+dependeDe(arado, collera).
 
 antecede(Tecnologia1, Tecnologia2):-
     dependeDe(Tecnologia1, Tecnologia2).
@@ -172,5 +175,8 @@ antecede(TecnologiaBase, Tecnologia2):-
 puedeDesarrollar(Jugador, Tecnologia):-
     esJugador(Jugador, _),
     not(tecnologia(Jugador, Tecnologia)),
-    antecede(Tecnologia, Tecnologia2),    
-    puedeDesarrollar(Jugador, Tecnologia2).
+    not(dependeDe(Tecnologia, _)).
+
+%puedeDesarrollar(Jugador, Tecnologia),
+%    antecede(Tecnologia, Tecnologia2),
+%    puedeDesarrollar(Jugador, Tecnologia2).
