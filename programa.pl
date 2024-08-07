@@ -171,12 +171,9 @@ antecede(TecnologiaBase, Tecnologia2):-
     antecede(TecnologiaBase, Tecnologia1).
 
 % b)
+desarrolloTecno(Jugador, Tecno):-
+    tecnologia(Jugador, Tecno).
 
-puedeDesarrollar(Jugador, Tecnologia):-
-    esJugador(Jugador, _),
-    not(tecnologia(Jugador, Tecnologia)),
-    not(dependeDe(Tecnologia, _)).
-
-%puedeDesarrollar(Jugador, Tecnologia),
-%    antecede(Tecnologia, Tecnologia2),
-%    puedeDesarrollar(Jugador, Tecnologia2).
+puedeDesarrollar2(Jugador, Tecno):-
+    not(tecnologia(Jugador, Tecno)),
+    forall(antecede(Tecno, Tecnos), desarrolloTecno(Jugador, Tecnos)).
