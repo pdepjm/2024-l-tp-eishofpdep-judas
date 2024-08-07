@@ -22,7 +22,7 @@ tecnologia(carola, herreria).
 tecnologia(dimitri, herreria).
 tecnologia(dimitri, fundicion).
 
-%  PUNTO 2
+% ====================================== PUNTO 2 ============================================
 
 esExpertoEnMetales(Persona):-
     esJugador(Persona,_),
@@ -35,20 +35,22 @@ oFundicionOEsRomano(Persona):-
 
 oFundicionOEsRomano(Persona):-
     esJugador(Persona,romanos).
-%  PUNTO 3
+
+% ====================================== PUNTO 3 ============================================
+
 esPopular(Civilizacion):-
         esJugador(Persona1, Civilizacion),
         esJugador(Persona2, Civilizacion),
         Persona1 \= Persona2.
 
 
-% PUNTO 4
+% ====================================== PUNTO 4 ============================================
 
 tieneAlcanceGlobal(Tecnologia):-
     tecnologia(_,Tecnologia),
     forall(esJugador(Alguien, _) , tecnologia(Alguien, Tecnologia)).
 
-% PUNTO 5
+% ====================================== PUNTO 5 ============================================
 
 % Verifica si todas las personas de la civilizacion saben la tecnologia
 civilizacionSabeTecnologia(Civilizacion, Tecnologia) :-
@@ -62,7 +64,7 @@ civilizacionLider(Civilizacion):-
 
 % SEGUNDA PARTE
 
-% PUNTO 6
+% ====================================== PUNTO 6 ============================================
 
 tiene(ana, jinete(caballo)).
 tiene(ana, piquero(conEscudo, 1)).
@@ -73,12 +75,9 @@ tiene(beto, piquero(conEscudo, 1)).
 tiene(beto, jinete(camello)).
 tiene(carola, piquero(sinEscudo, 3)).
 tiene(carola, piquero(conEscudo, 2)).
-
 % Dimitri no tiene unidades
 
-% PUNTO 7
-
-% vidaUnidad(Unidad, Vida).
+% ====================================== PUNTO 7 ============================================
 
 % Vida jinetes
 vidaUnidad(jinete(caballo), 90).
@@ -93,17 +92,45 @@ vidaUnidad(piquero(sinEscudo, 2), 65).
 vidaUnidad(piquero(sinEscudo, 3), 70).
 
 % Vida Piqueros con escudo
-vidaUnidad(piquero(conEscudo, Nivel), VidaConEscudo):-
-    vidaUnidad(piquero(sinEscudo, Nivel), VidaSinEscudo),
+vidaUnidad(piquero(conEscudo, N), VidaConEscudo):-
+    vidaUnidad(piquero(sinEscudo, N), VidaSinEscudo),
     VidaConEscudo is 1.10 * VidaSinEscudo.
 
-unidadConMasVida(Jugador, Unidad) :-
-    tiene(Jugador, Unidad),
-    findall(Vida, (tiene(Jugador, Unidades), vidaUnidad(Unidades, Vida)), Vidas),
-    max_member(VidaMasAlta, Vidas),
-    vidaUnidad(Unidad, VidaMasAlta).
+% Regla para encontrar la unidad con la vida máxima
+unidadConMasVida(Jugador, UnidadConMasVida):-
+    tiene(Jugador, UnidadConMasVida),
+    vidaUnidad(UnidadConMasVida, MayorVida),
+    forall((tiene(Jugador, OtraUnidad), vidaUnidad(OtraUnidad, OtraVida)),OtraVida =< MayorVida).
+% el forall verifica que no hay otra unidad del mismo jugador con una vida mayor que la vida de la unidad seleccionada.
 
-% PUNTO 8
+% ====================================== PUNTO 8 ============================================
+
+tieneVentaja(jinete(_),campeon(_)).
+tieneVentaja(campeon(_),piquero(_)).
+tieneVentaja(piquero(_),jinete(_)).
+tieneVentaja(jinete(camello),jinete(caballo)).
 
 
+leGana(Unidad1, Unidad2):-
+    tieneVentaja(Unidad1, Unidad2).
 
+leGana(Unidad1, Unidad2):-
+        not(tieneVentaja(Unidad1, Unidad2)),
+        not(tieneVentaja(Unidad2, Unidad1)),
+        vidaUnidad(Unidad1, Vida1),
+        vidaUnidad(Unidad2, Vida2),
+        Vida1 > Vida2.
+
+% ====================================== PUNTO 9 ============================================
+
+% Regla para contar los piqueros con y sin escudo
+contarPiqueros(Jugador, ConEscudo, SinEscudo) :-
+    findall(piquero(conEscudo, N), tiene(Jugador, piquero(conEscudo, N)), ListaConEscudo),
+    findall(piquero(sinEscudo, N), tiene(Jugador, piquero(sinEscudo, N)), ListaSinEscudo),
+    length(ListaConEscudo, ConEscudo),
+    length(ListaSinEscudo, SinEscudo).
+
+% Regla para determinar si un jugador puede sobrevivir a un asedio
+puedeSobrevivirAUnAsedio(Jugador):-
+    contarPiqueros(Jugador, ConEscudo, SinEscudo),
+    ConEscudo > SinEscudo.
