@@ -126,35 +126,26 @@ unidadConMasVida2(Jugador, Unidad) :-
 
 % ====================================== PUNTO 8 ============================================
 
-tieneVentaja(jinete(_),campeon(_)).
-tieneVentaja(campeon(_),piquero(_)).
-tieneVentaja(piquero(_),jinete(_)).
-tieneVentaja(jinete(camello),jinete(caballo)).
-
-
-leGana(Unidad1, Unidad2):-
-    tieneVentaja(Unidad1, Unidad2).
+leGana(jinete(_),campeon(_)).
+leGana(campeon(_),piquero(_)).
+leGana(piquero(_),jinete(_)).
+leGana(jinete(camello),jinete(caballo)).
 
 leGana(Unidad1, Unidad2):-
-        not(tieneVentaja(Unidad1, Unidad2)),
-        not(tieneVentaja(Unidad2, Unidad1)),
         vidaUnidad(Unidad1, Vida1),
         vidaUnidad(Unidad2, Vida2),
         Vida1 > Vida2.
 
 % ====================================== PUNTO 9 ============================================
 
-
-contarPiqueros(Jugador, ConEscudo, SinEscudo) :-
-    findall(piquero(conEscudo, Nivel), tiene(Jugador, piquero(conEscudo, Nivel)), ListaConEscudo),
-    findall(piquero(sinEscudo, Nivel), tiene(Jugador, piquero(sinEscudo, Nivel)), ListaSinEscudo),
-    length(ListaConEscudo, ConEscudo),
-    length(ListaSinEscudo, SinEscudo).
-
+contarPiqueros(Jugador, Escudo, EscudoNum) :-
+    findall(piquero(Escudo, Nivel), tiene(Jugador, piquero(Escudo, Nivel)), Lista),
+    length(Lista, EscudoNum).
 
 puedeSobrevivirAUnAsedio(Jugador):-
     tiene(Jugador, _),
-    contarPiqueros(Jugador, ConEscudo, SinEscudo),
+    contarPiqueros(Jugador, conEscudo, ConEscudo),
+    contarPiqueros(Jugador, sinEscudo, SinEscudo),
     ConEscudo > SinEscudo.
 
 % ====================================== PUNTO 10 ============================================
